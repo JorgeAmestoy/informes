@@ -9,6 +9,10 @@ REPORT LABL: Librería de python que permite crear informes. Es gratuita. <br>
 
 ## ejemploCanvasRpl.py
 
+## APUNTES PROFE ( ver ESemtia) 
+
+https://danielcastelao.esemtia.net/moodle/pluginfile.php/12135/mod_resource/content/1/reportlab-userguide.pdf
+
 ```
 auxiliar = canvas.Canvas("primerDocumento.pdf")
 
@@ -24,4 +28,18 @@ from reportlab.graphics.shapes import Image, Drawing # Esto es para que se pueda
 from reportlab.graphics import renderPDF # Esto es para que se pueda renderizar el documento pdf (mostrarlo en el navegador)
 from reportlab.lib.pagesizes import A4 # Esto es para que se pueda usar el tamaño A4
 ```
+
+**Page Layout And Typography Using Scripts** es una página
+que nos permite ver los distintos tipos de letra q
+que podemos usar en reportlab. <br>
+
+## ejemploDocPlatypus (ESEMTIA)<br>
+https://elviajedelnavegante.blogspot.com/2010/04/crear-documentos-pdf-en-python-y-3.html
+**Doc Template**<br>
+**Page Template**<br>
+**FRAMES**<br>
+**Flowables**
+
+**PAG 77 -> XML**
+
 
