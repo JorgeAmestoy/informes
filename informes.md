@@ -12,7 +12,9 @@ REPORT LABL: Librería de python que permite crear informes. Es gratuita. <br>
 ## APUNTES PROFE ( ver ESemtia) 
 
 https://danielcastelao.esemtia.net/moodle/pluginfile.php/12135/mod_resource/content/1/reportlab-userguide.pdf
-
+Pag 16¿?
+PAg 27: colores... Antes edicion...
+Pag 29: lo de que salgan desplzadas las frases
 ```
 auxiliar = canvas.Canvas("primerDocumento.pdf")
 
@@ -34,12 +36,18 @@ que nos permite ver los distintos tipos de letra q
 que podemos usar en reportlab. <br>
 
 ## ejemploDocPlatypus (ESEMTIA)<br>
-https://elviajedelnavegante.blogspot.com/2010/04/crear-documentos-pdf-en-python-y-3.html
+https://elviajedelnavegante.blogspot.com/2010/04/crear-documentos-pdf-en-python-y-3.html<br>
 **Doc Template**<br>
 **Page Template**<br>
 **FRAMES**<br>
 **Flowables**
 
 **PAG 77 -> XML**
+
+
+# 1-2-2024
+Libro ReportLab.pdf
+Capitulo 3: Fuentes y tipos de letra
+Capitulo 7: Tablasy TableStyles (pag 83)
 
 
