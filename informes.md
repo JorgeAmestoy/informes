@@ -44,10 +44,39 @@ https://elviajedelnavegante.blogspot.com/2010/04/crear-documentos-pdf-en-python-
 
 **PAG 77 -> XML**
 
+**Manual Reportlab**
+https://danielcastelao.esemtia.net/moodle/pluginfile.php/12135/mod_resource/content/1/reportlab-userguide.pdf
 
 # 1-2-2024
 Libro ReportLab.pdf
 Capitulo 3: Fuentes y tipos de letra
 Capitulo 7: Tablasy TableStyles (pag 83)
 
+
+# 5-2-2024
+
+ES COLUMNA, FILA NO FILA, COLUMNA
+
+MODULO ejemplotablaTemperatura.py
+
+**estilo.append(('TEXTCOLOR',(i,j),(i,j), colors.blue))**: Fijarme que no cierro con
+parentesis TEXTCOLOR. Diferencia entre esto y 
+ estilo.append(('TEXTCOLOR'),(i,j),(i,j), colors.blue)) ¿? EJecuta¿?
+
+ **if temperatura>0:
+            estilo.append(('TEXTCOLOR',(j,i),(j,i), colors.black))**:
+que es la (j,i)
+
+----------------------------------
+
+MODULO ejemploTablasCombinadas.py
+
+## EXAMEN FACTURA
+
+Dominar los PÁRRAFOS
+
+EJEMPLO DE PARRAFO, la cabecera hay que meterla en una tabla para que salga bien
+el color dentro de esta.
+
+Por qué algunso tiene save y los que no tienen tablas no?
 
