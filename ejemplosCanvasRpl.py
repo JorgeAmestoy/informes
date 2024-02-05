@@ -1,7 +1,7 @@
 from reportlab.pdfgen import canvas
 
 
-auxiliar = canvas.Canvas("primerDocumento.pdf")
+auxiliar = canvas.Canvas("ejemplosCanvasRpl.pdf")
 
 auxiliar.drawString(0,0, "Posicion origen (X,Y) = (0,0)")
 auxiliar.drawString(50,100, "Posicion (X,Y) = (50,100)")
