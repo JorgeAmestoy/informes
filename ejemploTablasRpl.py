@@ -25,12 +25,14 @@ datos = [['Empresas', 'Candidato 1', 'Candidato 2', 'Especificaciones'],
          [parrafo, imagen2]
          ]
 
-estilo = [('TEXTCOLOR',(0,0),(0,-1), colors.pink),# El 0,0 es la posicion de la primera fila y columna y el 0,-1 es la posicion de la primera fila y la ultima columna
-         ('TEXTCOLOR',(1,0),(-1,0), colors.blueviolet),# El 1,0 es la posicion de la segunda fila y primera columna y el -1,0 es la posicion de la ultima fila y la primera columna
-         ('TEXTCOLOR',(1,1),(-1,-1), colors.grey),# El 1,1 es la posicion de la segunda fila y segunda columna y el -1,-1 es la posicion de la ultima fila y la ultima columna
-         ('BOX',(1,1),(-1,-1), 1.25, colors.grey),# El 1,1 es la posicion de la segunda fila y segunda columna y el -1,-1 es la posicion de la ultima fila y la ultima columna. El 1.25 es el grosor de la linea y el color es el gris
-         ('INNERGRID',(1,1),(-1,-1), 1.25, colors.lightgrey),# El 1,1 es la posicion de la segunda fila y segunda columna y el -1,-1 es la posicion de la ultima fila y la ultima columna. El 1.25 es el grosor de la linea y el color es el gris claro
-         ('VALING',(0,0),(-1,-1), 1.25, 'MIDDLE'),# El 0,0 es la posicion de la primera fila y columna y el -1,-1 es la posicion de la ultima fila y la ultima columna. El 1.25 es el grosor de la linea y el 'MIDDLE' es para que se centre el texto. VALING significa Vertical Align
+
+# ES COLUMNA, FILA NO FILA, COLUMA
+estilo = [('TEXTCOLOR',(0,0),(0,-1), colors.pink), # Esto significa que va a cambiar el color del texto de la fila y columna entera
+         ('TEXTCOLOR',(1,0),(-1,0), colors.blueviolet),#
+         ('TEXTCOLOR',(1,1),(-1,-1), colors.grey),
+         ('BOX',(1,1),(-1,-1), 1.25, colors.grey),#  El 1.25 es el grosor de la linea y el color es el gris
+         ('INNERGRID',(1,1),(-1,-1), 1.25, colors.lightgrey),# El 1.25 es el grosor de la linea y el color es el gris claro
+         ('VALING',(0,0),(-1,-1), 1.25, 'MIDDLE'),# 'MIDDLE' es para que se centre el texto. VALING significa Vertical Align
 
           ]
 
