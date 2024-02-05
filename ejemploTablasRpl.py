@@ -13,16 +13,18 @@ elementosDoc = []# Esto es para que se cree una lista de elementos del documento
 imagen = Image("check.png")# SI fuese jppg tendria que poner el width y el height para que runnease
 imagen2 = Image("JorgeAmestoy.jpg",50,100)# Esto es para que se cree una imagen
 estiloCuerpoTexto = hojaEstilo['BodyText']# Damos un estilo BodyText al segundo párrafo, que será el texto a escribir.
+estiloCuerpoTexto2 = hojaEstilo['Heading4']
 #estiloCuerpoTexto.textColor = colors.pink# Esto es para que se cambie el color del texto a rojo
 estiloCuerpoTexto.textColor = Color(0,0,150,0.5)
 parrafo = Paragraph("<a backColor = 'green' fontSize = 15>Optare</a>", estiloCuerpoTexto)# Esto es para que se cree un parrafo con la cabecera. El segundo parametro es el estilo de la cabecera que he hecho antes.
+parrafo2 = Paragraph("Optare", estiloCuerpoTexto2)# Esto es para que se cree un parrafo con la cabecera. El segundo parametro es el estilo de la cabecera que he hecho antes.
 
 
 datos = [['Empresas', 'Candidato 1', 'Candidato 2', 'Especificaciones'],
          ['Ayco', 'Marcos', 'Rubén',' Desarrollado web con PHP'],
          ['Iterat', 'Borja','Juan', 'Reconocimiento de imágenes con OpenCV'],
-         [[parrafo, imagen],'Lidier','Lucas','Aplicaciones para las Telecomunicaciones'],
-         [parrafo, imagen2]
+         [[parrafo, parrafo2],'Lidier','Lucas','Aplicaciones para las Telecomunicaciones'],
+         [[parrafo, imagen]]
          ]
 
 
