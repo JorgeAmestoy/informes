@@ -1,4 +1,5 @@
-from reportlab.graphics.charts.legends import LineLegend
+from reportlab.graphics.charts.legends import LineLegend, Legend
+from reportlab.graphics.charts.piecharts import Pie, Pie3d
 from reportlab.platypus import SimpleDocTemplate, Spacer
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from reportlab.graphics.charts.linecharts import HorizontalLineChart
@@ -77,9 +78,81 @@ series = ['Maximas','Minimas']# Nombres de las series de la leyenda
 leyenda.colorNamePairs = [(graficaLineas.lines[i].strokeColor, series[i]) for i in range(len (graficaLineas.data))]# Esto es para que se ponga el color de la serie y el nombre de la serie en la leyenda. Uso una lista por comprensión para que se ponga el color y el nombre de la serie en la leyenda.
 # [('red','Maximas'),('blue','Minimas')]# Esta creando una tupla con el color y el nombre de la serie. Esto es para que se ponga el color de la serie y el nombre de la serie en la leyenda.
 dibujo.add(leyenda)# Agregar la leyenda al dibujo
-
-
 elementosDoc.append(dibujo)# Agregar el dibujo a la lista de elementos
+
+
+# GRAFICA EN FORMA DE TARTA 3D
+elementosDoc.append(Spacer(30, 30)) # Agregar un espacio de 20 puntos entre la gráfica de barras y la gráfica de líneas
+dibujo = Drawing(300, 200) # Crear un objeto de tipo Drawing
+tarta = Pie3d() # Crear un objeto de tipo Pie
+tarta.x = 65# Posición en x de la gráfica
+tarta.y = 15# Posición en y de la gráfica
+tarta.data = [10,5,20,25,40]# Datos de la gráfica
+tarta.labels = ['Edge', 'Brave', 'Firefox', 'Safari', 'Chrome']# Etiquetas de la gráfica
+tarta.slices.strokeWidth=0.5# Grosor del borde de las porciones de la gráfica
+tarta.slices[3].popout = 10# Esto es para que se separe la porción de la gráfica de la tarta en 10 puntos
+tarta.slices[3].strokeWidth = 2# Grosor del borde de la porción de la gráfica
+tarta.slices[3].strokeDashArray = [2,2]# Tipo de línea del borde de la porción de la gráfica. Es en forma de guión.
+tarta.slices[3].labelRadius = 2# Radio de la etiqueta de la porción de la gráfica. ESto es para que se ponga la etiqueta fuera de la porción de la gráfica.
+tarta.slices[3].fontColor = colors.red# Color de la fuente de la etiqueta de la porción de la gráfica
+# tarta.slices[3].fillColor = colors.pink# Color de relleno de la porción de la gráfica
+tarta.sideLabels = 1# Esto es para que se pongan las etiquetas fuera de la gráfica
+dibujo.add(tarta)# Agregar la gráfica al dibujo
+elementosDoc.append(dibujo)# Agregar el dibujo a la lista de elementos
+
+# GRAFICA EN FORMA DE TARTA
+elementosDoc.append(Spacer(30, 30)) # Agregar un espacio de 20 puntos entre la gráfica de barras y la gráfica de líneas
+dibujo = Drawing(300, 200) # Crear un objeto de tipo Drawing
+tarta = Pie() # Crear un objeto de tipo Pie
+tarta.x = 65# Posición en x de la gráfica
+tarta.y = 15# Posición en y de la gráfica
+tarta.data = [10,5,20,25,40]# Datos de la gráfica
+tarta.labels = ['Edge', 'Brave', 'Firefox', 'Safari', 'Chrome']# Etiquetas de la gráfica
+tarta.slices.strokeWidth=0.5# Grosor del borde de las porciones de la gráfica
+tarta.slices[3].popout = 10# Esto es para que se separe la porción de la gráfica de la tarta en 10 puntos
+tarta.slices[3].strokeWidth = 2# Grosor del borde de la porción de la gráfica
+tarta.slices[3].strokeDashArray = [2,2]# Tipo de línea del borde de la porción de la gráfica. Es en forma de guión.
+tarta.slices[3].labelRadius = 2# Radio de la etiqueta de la porción de la gráfica. ESto es para que se ponga la etiqueta fuera de la porción de la gráfica.
+tarta.slices[3].fontColor = colors.blue# Color de la fuente de la etiqueta de la porción de la gráfica
+# tarta.slices[3].fillColor = colors.pink# Color de relleno de la porción de la gráfica
+tarta.sideLabels = 1# Esto es para que se pongan las etiquetas fuera de la gráfica
+dibujo.add(tarta)# Agregar la gráfica al dibujo
+
+
+leyenda = Legend()# Crear un objeto de tipo Legend
+leyenda.x=300# Posición en horizontal de la leyenda
+leyenda.y = 120# Posición vertical de la leyenda
+leyenda.dx = 10# Distancia en x de la leyenda
+leyenda.dy =10  # Distancia en y de la leyenda
+leyenda.fontName = 'Helvetica'# Tipo de fuente de la leyenda
+leyenda.fontSize = 8# Tamaño de la fuente de la leyenda
+leyenda.boxAnchor = 'n'# Posición de la caja de la leyenda donde n es norte. Para oeste sería w, para sur s y para este e.
+leyenda.columnMaximum = 15# Número máximo de columnas de la leyenda
+leyenda.strokeWidth = 0.5# Grosor del borde de la leyenda
+leyenda.strokeColor = colors.grey# Color del borde de la leyenda
+leyenda.autoXPadding = 5# Espacio horizontal entre la leyenda y la gráfica
+leyenda.yGap = 0# Espacio vertical entre las etiquetas de la leyenda
+leyenda.dxTextSpace = 3# Distancia en x entre las etiquetas de la leyenda
+leyenda.alignment = 'right'# Alineación de la leyenda
+leyenda.dividerLines = 1|3|4# Líneas divisorias de la leyenda. ESto es para que se pongan las líneas divisorias en la leyenda. LOs numeros son los códigos de las líneas divisorias. 1 es para que se ponga la línea divisoria arriba, 2 es para que se ponga la línea divisoria abajo y 4 es para que se ponga la línea divisoria en el medio.
+leyenda.dividerOffsY = 4.5# Distancia en y de las líneas divisorias de la leyenda
+leyenda.subCols.rpad = 30# Distancia en x entre las columnas de la leyenda
+
+paresColorLeyenda = list()# Crear una lista de pares de color y leyenda
+colores = [colors.red, colors.blue, colors.green, colors.yellow, colors.pink]# Colores de las porciones de la gráfica
+for i, color in enumerate(colores):# Recorro la lista de colores
+    tarta.slices[i].fillColor = color# Esto es para que se ponga el color de la porción de la gráfica
+    paresColorLeyenda.append((color,tarta.labels[i]))
+
+leyenda.colorNamePairs = paresColorLeyenda# Esto es para que se ponga el color de la serie y el nombre de la serie en la leyenda
+
+dibujo.add(leyenda)# Agregar la leyenda al dibujo
+elementosDoc.append(dibujo)# Agregar el dibujo a la lista de elementos
+
+
+
+
+
 
 documento = SimpleDocTemplate("ejemploGraficasRpl.pdf", pagesize=A4) # Crear un objeto de tipo SimpleDocTemplate
 documento.build(elementosDoc) # Construir el documento a partir de la lista de elementos
