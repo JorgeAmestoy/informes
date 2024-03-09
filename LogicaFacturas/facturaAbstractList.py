@@ -23,33 +23,33 @@ from PyQt6.QtCore import QAbstractListModel, Qt
 
 from PyQt6.QtCore import QAbstractListModel, Qt
 
-class TareasModelo(QAbstractListModel):
+class TareasModelo(QAbstractListModel):  # Define una clase llamada TareasModelo que hereda de QAbstractListModel
 
     def __init__(self, tareas=None):
-        super().__init__()
-        self.tareas = tareas or []
+        super().__init__()  # Llama al inicializador de la clase base (QAbstractListModel).
+        self.tareas = tareas or []  # Inicializa el atributo 'tareas' con el valor del argumento tareas, si se proporciona. Si no se proporciona ningún valor para tareas, se asigna una lista vacía [].
 
     def data(self, indice, rol):
-        if rol == Qt.ItemDataRole.DisplayRole:
-            tarea = self.tareas[indice.row()]
-            return ", ".join(map(str, tarea))  # Concatena todos los elementos de la tupla en una cadena separada por comas.
+        if rol == Qt.ItemDataRole.DisplayRole:  # Verifica si el rol es para mostrar datos.
+            tarea = self.tareas[indice.row()]  # Obtiene la tarea en el índice dado.
+            return ", ".join(map(str, tarea))  # Concatena todos los elementos de la tupla en una cadena separada por comas y la devuelve como representación de la tarea.
 
-        if rol == Qt.ItemDataRole.DecorationRole:
-            return None
+        if rol == Qt.ItemDataRole.DecorationRole:  # Verifica si el rol es para mostrar la decoración de la tarea.
+            return None  # Devuelve None para indicar que no hay decoración asociada.
 
     def setData(self, indice, valor, rol=Qt.ItemDataRole.EditRole):
-        if rol == Qt.ItemDataRole.EditRole:
-            # Actualiza la tupla de la tarea en el índice dado.
+        if rol == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para editar datos.
+            # Actualiza la tupla de la tarea en el índice dado dividiendo el valor en una lista y convirtiéndola en una tupla.
             self.tareas[indice.row()] = tuple(valor.split(", "))
 
             # Notifica a las vistas que los datos han cambiado.
             self.dataChanged.emit(indice, indice)
-            return True
+            return True  # Devuelve True para indicar que la operación fue exitosa.
 
-        return False
+        return False  # Devuelve False si el rol no es para editar datos.
 
     def rowCount(self, indice):
-        return len(self.tareas)
+        return len(self.tareas)  # Devuelve el número de tareas en la lista.
 
 class MainWindow(QMainWindow):
     def __init__(self):

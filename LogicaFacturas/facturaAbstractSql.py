@@ -12,7 +12,8 @@ from conexionBD import ConexionBD
 
 
 
-class ModeloTaboa(QAbstractTableModel):
+class ModeloTaboa(QAbstractTableModel):  # Define una clase llamada ModeloTaboa que hereda de QAbstractTableModel.
+
     def __init__(self, datos):
         super().__init__()  # Llama al inicializador de la clase base (QAbstractTableModel).
         self.datos = datos  # Inicializa el atributo 'datos' con los datos proporcionados.
@@ -22,25 +23,27 @@ class ModeloTaboa(QAbstractTableModel):
 
     def columnCount(self, index):
         if self.datos:
-            # Devuelve el número de columnas basado en la longitud de la primera fila de datos
+            # Devuelve el número de columnas basado en la longitud de la primera fila de datos.
             return len(self.datos[0])
         return 0
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
-        if index.isValid():
+        if index.isValid():  # Verifica si el índice es válido.
             if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
+                # Obtiene el valor de los datos en la posición del índice y lo devuelve como una cadena.
                 value = self.datos[index.row()][index.column()]
                 return str(value)
 
     def setData(self, index, value, role):
-        if role == Qt.ItemDataRole.EditRole:
+        if role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para editar datos.
+            # Actualiza el valor de los datos en la posición del índice con el nuevo valor proporcionado.
             self.datos[index.row()][index.column()] = value
-            return True
-        return False
+            return True  # Devuelve True para indicar que la operación fue exitosa.
+        return False  # Devuelve False si el rol no es para editar datos.
 
-    def flags(self, index):# Para que puedan ser editables, seleccionables, etc
+    def flags(self, index):
+        # Devuelve las banderas que especifican cómo se comportan los elementos en la vista, como si son editables, seleccionables, etc.
         return Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
-
 
 class MainWindow(QMainWindow):
     def __init__(self):

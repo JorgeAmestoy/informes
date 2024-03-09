@@ -8,20 +8,21 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 
-class InvoiceModel(QAbstractTableModel):
+class InvoiceModel(QAbstractTableModel):  # Define una clase llamada InvoiceModel que hereda de QAbstractTableModel.
+
     def __init__(self, data):
-        super().__init__()
-        self._data = data
+        super().__init__()  # Llama al inicializador de la clase base (QAbstractTableModel).
+        self._data = data  # Inicializa el atributo '_data' con los datos proporcionados.
 
     def data(self, index, role):
-        if role == Qt.ItemDataRole.DisplayRole:
-            return self._data[index.row()][index.column()]
+        if role == Qt.ItemDataRole.DisplayRole:  # Verifica si el rol es para mostrar datos.
+            return self._data[index.row()][index.column()]  # Devuelve el dato en la posición del índice.
 
     def rowCount(self, parent):
-        return len(self._data)
+        return len(self._data)  # Devuelve el número de filas en los datos.
 
     def columnCount(self, parent):
-        return len(self._data[0])
+        return len(self._data[0])  # Devuelve el número de columnas en los datos, asumiendo que todas las filas tienen la misma longitud.
 
 
 class MainWindow(QMainWindow):
