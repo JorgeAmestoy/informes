@@ -6,16 +6,17 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.pdfgen.canvas import Color
 
-hojaEstilo = getSampleStyleSheet()# Esto es para que se cree un objeto de estilo
+hojaEstilo = getSampleStyleSheet()# Creo hoja de estilo
 
-elementosDoc = []# Esto es para que se cree una lista de elementos del documento
+elementosDoc = []# Creo lista de elementos del documento vacío
 
-temperaturas = [['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',# Dejo la primera fila vacia para que se ponga el nombre de la fila con ' '
+# TABLA TEMPERATURAS
+temperaturas = [['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',# Dejo la primera celda vacia ya que corresponde a las etiquetas de las temperaturas max y min
                  'Julio', 'Agosto','Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 ['Maximas', 15,16,20,25,27,31,35,38,30,25,20,18],
                 ['Minimas',-3,-4,-1,4,6,9,12,16,12,8,2,-2]]
 
-# Es columna, fila no fila,columna.
+# ESTILO (Es columna, fila no fila,columna!!!!!!!!!!!)
 estilo =[('TEXTCOLOR',(0,0),(-1,0), colors.grey),# Darle color desde la columna 0 hasta la ultima co0luma (-1, penultima seria -2) de la fila 0
          ('TEXTCOLOR',(0,1),(0,-1), colors.grey),#
          ('BOX',(1,1),(-1,-1), 1.50, colors.grey), #
@@ -43,12 +44,11 @@ for i,fila in enumerate(temperaturas):
               
 
 
-
+# CREACIÓN TABLA
 tabla = Table(data=temperaturas)# colWidths=100, rowHeights=30 Esto dentro de los parentesis para determinar el tamaño de la tabla. SI no lo pongo se ajusta al tamaño de la pagina
 tabla.setStyle(estilo)
-
 elementosDoc.append(tabla)
 
-
+# CREACIÓN PDF
 documento = SimpleDocTemplate("ejemploTablaTemperatura.pdf", pagesize=A4, showBoundary=0)# Esto es para que se cree un documento pdf con el nombre "ejemploDocPlatypus.pdf" y el tamaño A4. ShowBoundary es para que se muestre el borde de la hoja. Si es 0 no se muestra.
 documento.build(elementosDoc)# Esto es para que se cree el documento pdf con los elementos de la lista de elementos del documento

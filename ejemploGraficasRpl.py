@@ -9,20 +9,21 @@ from reportlab.lib import colors
 from reportlab.graphics.shapes import Drawing
 from reportlab.graphics.widgets.markers import makeMarker
 
-hojaEstilo = getSampleStyleSheet() # Obtener una hoja de estilo
+hojaEstilo = getSampleStyleSheet() # Creo una hoja de estilo
 
-# Crear un objeto de tipo lista que almacenará los objetos Platypus
-elementosDoc = []
+elementosDoc = []# Creo una lista de elementos vacía
 
-# Crear datos de temperaturas
+# TABLA
 temperaturas = [
                ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                [15, 16, 20, 28, 30, 32, 35, 36, 34, 30, 20, 18],
                [-3, -4, -1, 18, 20, 22, 25, 26, 24, 20, 2, -2]
                ]
-# Grafica de barras
+
+# GRÁFICA DE BARRAS
 dibujo = Drawing(400, 200) # Crear un objeto de tipo Drawing
 graficaBarras = VerticalBarChart() # Crear un objeto de tipo VerticalBarChart
+
 graficaBarras.x = 50 # Posición en x de la gráfica
 graficaBarras.y = 50 # Posición en y de la gráfica
 graficaBarras.height = 125 # Altura de la gráfica
@@ -31,21 +32,21 @@ graficaBarras.data = temperaturas[1:] # Datos de la gráfica donde 1: es para om
 graficaBarras.strokeColor = colors.black # Color del borde de la gráfica
 graficaBarras.valueAxis.valueMin = -5 # Valor mínimo del eje vertical de la gráfica
 graficaBarras.valueAxis.valueMax = 40 # Valor máximo del eje vertical de la gráfica
-graficaBarras.valueAxis.valueStep = 5 # Paso del eje vertical de la gráfica
+graficaBarras.valueAxis.valueStep = 5 # 5 unidades de división verticalmente
 graficaBarras.categoryAxis.labels.boxAnchor = 'ne' # Posición de las etiquetas del eje horizontal de la gráfica. Noreste.
 graficaBarras.categoryAxis.labels.dx = 8 # Distancia en x de las etiquetas del eje horizontal de la gráfica
 graficaBarras.categoryAxis.labels.dy = -10 # Distancia en y de las etiquetas del eje horizontal de la gráfica
 graficaBarras.categoryAxis.labels.angle = 30 # Ángulo de las etiquetas del eje horizontal de la gráfica
 graficaBarras.categoryAxis.categoryNames = temperaturas[0] # Nombres de las categorías del eje horizontal de la gráfica
 graficaBarras.groupSpacing = 10 # Espacio entre grupos de barras de la gráfica
-graficaBarras.barSpacing = 2 # Espacio entre barras de la gráfica
+graficaBarras.barSpacing = 5 # Espacio entre barras de la gráfica
 
 
 dibujo.add(graficaBarras) # Agregar la gráfica al dibujo
 elementosDoc.append(dibujo) # Agregar el dibujo a la lista de elementos
-elementosDoc.append(Spacer(1, 12)) # Agregar un espacio de 20 puntos entre la gráfica de barras y la gráfica de líneas
+elementosDoc.append(Spacer(1, 100)) # Agregar un espacio  1 pulgada de ancho y 12 puntos de alto entre la gráfica de barras y la gráfica de líneas
 
-# Grafica de líneas
+# GRÁFICA DE LÍNEAS
 dibujo = Drawing(400, 200) # Crear un objeto de tipo Drawing
 graficaLineas = HorizontalLineChart() # Crear un objeto de tipo HorizontalLineChart
 graficaLineas.x = 30
