@@ -185,16 +185,17 @@ class MainWindow(QMainWindow):
 
             # Configurar el estilo de la tabla
             estilo = TableStyle([
-                ('BACKGROUND', (0, 0), (-1, -1), colors.darkgreen),
-                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                ('BOTTOMPADDING', (0, 0), (-1, 0), 7),
-                ('BACKGROUND', (0, 1), (-1, -1), colors.lightgreen),
-                ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-                ('FONTSIZE', (0, 0), (-1, -1), 15),
-                ('LEADING', (0, 0), (-1, -1), 20),
-                ('GRID', (0, 0), (-1, -1), 1, colors.white),
+                ('BACKGROUND', (0, 0), (-1, -1), colors.darkgreen), # Establece el color de fondo oscuro para toda la tabla
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),  # Establece el color de texto blanco para la primera fila
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Establece la fuente en negrita para la primera fila
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 7),  # Añade un espacio inferior a la primera fila
+                ('BACKGROUND', (0, 1), (-1, -1), colors.lightgreen), # Establece el color de fondo claro para todas las filas excepto la primera
+                ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),  # Establece la fuente en negrita para la última fila
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),  # Centra todo el texto dentro de la tabla
+                ('FONTSIZE', (0, 0), (-1, -1), 15),  # Establece el tamaño de fuente en 15 para toda la tabla
+                ('LEADING', (0, 0), (-1, -1), 20),  # Establece el interlineado en 20 para toda la tabla
+                ('GRID', (0, 0), (-1, -1), 1, colors.white)  # Añade una cuadrícula blanca a la tabla
+
             ])
 
             # Crear y dibujar la tabla en el lienzo
