@@ -154,3 +154,7 @@ La línea `total_row = ['', '', 'TOTAL', f'{total:.2f} €']` crea una nueva fil
 - `''`: Otro espacio en blanco para la segunda columna.
 - `'TOTAL'`: La palabra "TOTAL" para la tercera columna, indicando que esta fila representa el total de la factura.
 - `f'{total:.2f} €'`: Utiliza una cadena formateada (f-string) para convertir el valor de `total` en una cadena con dos decimales (`:.2f`) seguidos del símbolo del euro (`€`). Esto muestra el total con dos decimales y el símbolo del euro al final.
+
+
+
+
