@@ -8,6 +8,16 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
+from reportlab.graphics.charts.legends import LineLegend, Legend
+from reportlab.graphics.charts.piecharts import Pie, Pie3d
+from reportlab.platypus import SimpleDocTemplate, Spacer
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+from reportlab.graphics.charts.linecharts import HorizontalLineChart
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.graphics.shapes import Drawing
+from reportlab.graphics.widgets.markers import makeMarker
 import sys
 import typing
 
@@ -131,6 +141,44 @@ class MainWindow(QMainWindow):
 
     def on_botonGenerarFactura_clicked(self):
         try:
+
+            hojaEstilo = getSampleStyleSheet()  # Creo una hoja de estilo
+            elementosDoc = []  # Creo una lista de elementos vacía
+
+            # TABLA
+            temperaturas = [
+                ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre',
+                 'Noviembre', 'Diciembre'],
+                [15, 16, 20, 28, 30, 32, 35, 36, 34, 30, 20, 18],
+                [-3, -4, -1, 18, 20, 22, 25, 26, 24, 20, 2, -2]
+            ]
+            # GRÁFICA DE BARRAS
+            dibujo = Drawing(150, 300)  # Crear un objeto de tipo Drawing
+            graficaBarras = VerticalBarChart()  # Crear un objeto de tipo VerticalBarChart
+
+            graficaBarras.x = 50  # Posición en x de la gráfica
+            graficaBarras.y = 50  # Posición en y de la gráfica
+            graficaBarras.height = 150  # Altura de la gráfica
+            graficaBarras.width = 300  # Ancho de la gráfica
+            graficaBarras.data = temperaturas[
+                                 1:]  # Datos de la gráfica donde 1: es para omitir la primera fila de la tabla
+            graficaBarras.strokeColor = colors.black  # Color del borde de la gráfica
+            graficaBarras.valueAxis.valueMin = -5  # Valor mínimo del eje vertical de la gráfica
+            graficaBarras.valueAxis.valueMax = 40  # Valor máximo del eje vertical de la gráfica
+            graficaBarras.valueAxis.valueStep = 5  # 5 unidades de división verticalmente
+            graficaBarras.categoryAxis.labels.boxAnchor = 'ne'  # Posición de las etiquetas del eje horizontal de la gráfica. Noreste.
+            graficaBarras.categoryAxis.labels.dx = 8  # Distancia en x de las etiquetas del eje horizontal de la gráfica
+            graficaBarras.categoryAxis.labels.dy = -10  # Distancia en y de las etiquetas del eje horizontal de la gráfica
+            graficaBarras.categoryAxis.labels.angle = 30  # Ángulo de las etiquetas del eje horizontal de la gráfica
+            graficaBarras.categoryAxis.categoryNames = temperaturas[
+                0]  # Nombres de las categorías del eje horizontal de la gráfica
+            graficaBarras.groupSpacing = 10  # Espacio entre grupos de barras de la gráfica
+            graficaBarras.barSpacing = 5  # Espacio entre barras de la gráfica
+
+            dibujo.add(graficaBarras)  # Agregar la gráfica al dibujo
+            elementosDoc.append(dibujo)  # Agregar el dibujo a la lista de elementos
+
+
             print("Generando factura...")
             # Recoger los datos de los campos de texto
             direccion = self.txtdireccion.text()
@@ -145,6 +193,7 @@ class MainWindow(QMainWindow):
             c = canvas.Canvas("PDFfacturaListSql.pdf", pagesize=A4)
             c.setFont("Helvetica", 20)
             c.drawString(340, 750, "FACTURA SIMPLIFICADA")
+
 
             c.setFont("Helvetica", 20)
             c.drawString(100, 700, "Nombre de tu Empresa")
@@ -213,18 +262,26 @@ class MainWindow(QMainWindow):
                 ('GRID', (0, 0), (-1, -1), 1, colors.white),
             ])
 
+            # Añado gráfica
+            dibujo.drawOn(c, 100, 300)  # Ajusta la posición de acuerdo a tus necesidades
+
             # Crear y dibujar la tabla en el lienzo
             tabla = Table(data=datos_factura, colWidths=[100, 100, 100, 100])
             tabla.setStyle(estilo)
             tabla.wrapOn(c, 0, 0)
-            tabla.drawOn(c, 100, 300)
+            tabla.drawOn(c, 100, 150)
+
+
 
             # Línea divisoria
-            c.line(100, 200, 575, 200)
+            c.line(10, 100, 600, 100)
+
 
             # Mensaje de agradecimiento
             c.setFont("Helvetica-Bold", 16)
-            c.drawRightString(450, 150, "GRACIAS POR SU CONFIANZA")
+            c.drawRightString(420, 50, "GRACIAS POR SU CONFIANZA")
+
+
 
             # Guardar y cerrar el archivo PDF
             c.showPage()
