@@ -8,52 +8,23 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
+from conexionBD import ConexionBD
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
+import sqlite3
+from PyQt6.QtSql import QSqlDatabase, QSqlTableModel
+from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QPushButton, QTableView, QLineEdit, QLabel, QMessageBox, QComboBox
+from PyQt6.uic.properties import QtGui
 
-
-class ModeloTaboa(QAbstractTableModel):
-    def __init__(self, datos):
-        super().__init__()  # Llama al inicializador de la clase base (QAbstractTableModel).
-        self.datos = datos  # Inicializa el atributo 'datos' con los datos proporcionados.
-
-    def rowCount(self, index):
-        return len(self.datos)  # Devuelve el número de filas en los datos.
-
-    def columnCount(self, index):
-        return len(self.datos[0])  # Devuelve el número de columnas en los datos (se asume que todas las filas tienen la misma cantidad de columnas).
-
-    def data(self, index, role=Qt.ItemDataRole.DisplayRole):
-        if index.isValid():  # Verifica si el índice es válido.
-            if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para mostrar o editar datos.
-                value = self.datos[index.row()][index.column()]  # Obtiene el valor en la posición del índice.
-                return str(value)  # Devuelve el valor convertido a cadena.
-
-    def setData(self, index, value, role):
-        if role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para editar datos.
-            self.datos[index.row()][index.column()] = value  # Actualiza el valor en la posición del índice con el nuevo valor.
-            return True  # Devuelve True para indicar que la operación fue exitosa.
-        return False  # Devuelve False si el rol no es para editar datos.
-
-    def flags(self, index):# Para que puedan ser editables, seleccionables, etc
-        return Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Generador de Facturas")
+        self.setWindowTitle("Generador de Facturas SQL")
 
         cajav = QVBoxLayout()
-
-        # LISTA CON CONTENIDO DE TABLA
-        self.tabla_data = [
-            ['Producto 1', '3,2', '5', '16,00'],
-            ['Producto 2', '2,1', '3', '6,30'],
-            ['Producto 3', '2,9', '76', '220,40'],
-            ['Producto 4', '5', '23', '115,00'],
-            ['Producto 5', '4,95', '3', '14,85'],
-            ['Producto 6', '6', '2', '12,00']
-        ]
-
         # BOTONES Y TXT
         direccion = QLabel("Direccion")
         cajav.addWidget(direccion)
@@ -84,25 +55,34 @@ class MainWindow(QMainWindow):
         self.txtnumfactura = QLineEdit()  # Agregar self
         cajav.addWidget(self.txtnumfactura)
 
-
-        # TABLA
-        self.table_view = QTableView()
-        self.table_view.setModel(ModeloTaboa(self.tabla_data))
-        self.table_view.setSelectionMode(QTableView.SelectionMode.SingleSelection)
-        self.table_view.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
-        self.table_view.setEditTriggers(QTableView.EditTrigger.AllEditTriggers)
-        cajav.addWidget(self.table_view)
+        # ComboBox
+        self.combo = QComboBox()
+        self.combo.addItems(("Enero","Febrero","Marzo"))
+        cajav.addWidget(self.combo)
 
 
-        # BOTÓN AGREGAR PRODUCTO
-        self.botonAnhadir = QPushButton("Agregar Producto")
-        self.botonAnhadir.clicked.connect(self.on_botonAnhadir_clicked)
-        cajav.addWidget(self.botonAnhadir)
+        # BASE DE DATOS
+        self.baseDatos = QSqlDatabase("QSQLITE")# Crear una instancia de la base de datos SQLite en PyQt
+        self.baseDatos.setDatabaseName("baseDatosCasa.dat")  # Establecer el nombre de la base de datos a la que se va a conectar
+        self.baseDatos.open()# Abrir la conexión con la base de datos
+        self.bbdd = sqlite3.connect("baseDatosCasa.dat")  # Establecer una conexión directa con la base de datos utilizando sqlite3 (sin usar PyQt)
+        self.c = self.bbdd.cursor()# Crear un cursor para ejecutar consultas en la base de datos
+
+        # QTABLE VIEW
+        self.tabla = QTableView()  # Creo objeto QTableView para visualizar los datos de la base de datos en una tabla
+        cajav.addWidget(self.tabla)  # Lo añado al layout vertical
+        self.modelo = QSqlTableModel(db=self.baseDatos)  # Creo el modelo que va a usar el objeto TableView. En este caso, el modelo a usar es QSqlTableModel, que sirve para trabajar con bases de datos.
+        self.tabla.setModel(self.modelo)  # Añado el modelo al objeto QTableView (tabla)
+        self.modelo.setTable("listaPersonas")  # Añado al modelo la tabla listaPersonas creada en la base de datos
+        self.modelo.select()  # Para amosar los datos de dicha tabla. Sin esto no se ve ná.
+        #self.tabla.clicked.connect(self.on_tabla_clicked)  # EVENTO TABLA AL HACER CLICK SOBRE ELLA
+        self.tabla.setSelectionMode(QTableView.SelectionMode.NoSelection)
+
 
         # BOTÓN GENERAR FACTURA
-        self.botonGenerarFactura = QPushButton("Generar Factura")
-        self.botonGenerarFactura.clicked.connect(self.on_botonGenerarFactura_clicked)
-        cajav.addWidget(self.botonGenerarFactura)
+        self.botonCargarDatos = QPushButton("Generar Factura")
+        self.botonCargarDatos.clicked.connect(self.on_botonGenerarFactura_clicked)
+        cajav.addWidget(self.botonCargarDatos)
 
         container = QWidget()
         container.setLayout(cajav)  # Añadir layout principal
@@ -110,19 +90,6 @@ class MainWindow(QMainWindow):
         self.setFixedSize(500,700)
         self.show()
 
-    def on_botonAnhadir_clicked(self):
-        # Método para agregar un nuevo producto a la tabla
-        nombreProducto, ok_name = QInputDialog.getText(self, "Agregar Producto", "Nombre del Producto:")
-        precioProducto, ok_price = QInputDialog.getDouble(self, "Agregar Producto", "Precio del Producto:")
-        cantidadProducto, ok_quantity = QInputDialog.getInt(self, "Agregar Producto", "Cantidad del Producto:")
-        total, ok_total = QInputDialog.getDouble(self, "Total Producto", "Total del producto:")
-
-        # Agregar los datos a la lista de datos
-        nuevaFila = [nombreProducto, precioProducto, cantidadProducto, total]
-        self.tabla_data.append(nuevaFila)
-
-        # Actualizar la vista de la tabla
-        self.table_view.model().layoutChanged.emit()
 
 
     def on_botonGenerarFactura_clicked(self):
@@ -136,9 +103,10 @@ class MainWindow(QMainWindow):
             email = self.textemail.text()
             fecha = self.txtfecha.text()
             numeroFactura = self.txtnumfactura.text()
+            mes = self.combo.currentText()#currentIndex() para obtener el índice seleccionado
 
             # Crear el archivo PDF
-            c = canvas.Canvas("facturaAbstractTable.pdf", pagesize=A4)
+            c = canvas.Canvas("PDFfacturaSQL.pdf", pagesize=A4)
             c.setFont("Helvetica", 20)
             c.drawString(340, 750, "FACTURA SIMPLIFICADA")
 
@@ -147,6 +115,7 @@ class MainWindow(QMainWindow):
 
             c.drawImage("check.png", 500, 700, 40, 40)
 
+            # LADO IZQUIERDO
             c.setFont("Helvetica", 14)
             c.drawString(100, 680, "Dirección: ")
             direccion_texto = c.beginText(200, 680)
@@ -177,6 +146,7 @@ class MainWindow(QMainWindow):
             mail.textLine(email)
             c.drawText(mail)
 
+            # LADO DERECHO
             c.setFont("Helvetica", 14)
             c.drawRightString(500, 650, "Fecha Emisión: ")
             fechaEmision = c.beginText(500, 650)
@@ -189,9 +159,26 @@ class MainWindow(QMainWindow):
             numeroFactura_texto.textLine(numeroFactura)
             c.drawText(numeroFactura_texto)
 
-            # Crear datos para la tabla
-            encabezadoTabla = ['Descripción', 'Importe', 'Cantidad', 'Total']
-            infoTabla = self.tabla_data
+            c.setFont("Helvetica", 14)
+            c.drawRightString(500, 610, "Mes: ")
+            numeroFactura_texto = c.beginText(500, 610)
+            numeroFactura_texto.textLine(numeroFactura)
+            c.drawText(numeroFactura_texto)
+
+            # Obtener los datos de la tabla de la interfaz de usuario
+            datos_tabla = []  # Lista que almacenará los datos de la tabla para la factura
+            for fila in range(self.modelo.rowCount()):  # Iterar a través de las filas del modelo de la tabla. Con el range consigo el indice de cada fila que itera
+                datos_fila = []  # Lista que almacenará los datos de una fila específica
+                for columna in range(self.modelo.columnCount()):  # Iterar a través de las columnas del modelo de la tabla. Con el range consigo el indice de cada columna que itera
+                    indice = self.modelo.index(fila,columna)  # Obtener el índice del elemento en la posición (fila, columna)
+                    valor = self.modelo.data(indice)  # Obtener el valor en la posición especificada por el índice
+                    datos_fila.append(valor)  # Agregar el valor a la lista de datos de la fila actual
+                datos_tabla.append(datos_fila)  # Agregar los datos de la fila actual a la lista de datos de la tabla
+
+            encabezadoTabla = ['DNI', 'Nombre', 'Género', 'Edad', 'Fallecido']
+            datos_tabla.insert(0, encabezadoTabla)  # Insertar el encabezado al principio, en la fila cero.
+
+
 
             # Configurar el estilo de la tabla
             estilo = TableStyle([
@@ -211,17 +198,17 @@ class MainWindow(QMainWindow):
             ])
 
             # TAMAÑO TABLA
-            tabla = Table(data=[encabezadoTabla] + infoTabla, colWidths=[200, 70, 70, 70])
+            tabla = Table(datos_tabla)
             tabla.setStyle(estilo)
 
             # POSICION TABLA EN LIENZO
             tabla.wrapOn(c, 0, 0)
-            tabla.drawOn(c, 100, 300)  # Ajusta las coordenadas
+            tabla.drawOn(c, 80, 400)  # Ajusta las coordenadas
 
-            c.line(100, 200, 575, 200)
+            c.line(100, 250, 575, 250)
 
             c.setFont("Helvetica-Bold", 16)
-            c.drawRightString(450, 150, "GRACIAS POR SU CONFIANZA")
+            c.drawRightString(450, 200, "GRACIAS POR SU CONFIANZA")
 
             # TABLA 2
             tabla_data2 = [['']]

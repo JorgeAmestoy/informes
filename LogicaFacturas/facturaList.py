@@ -54,7 +54,7 @@ class TareasModelo(QAbstractListModel):  # Define una clase llamada TareasModelo
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Generador de Facturas List Model")
+        self.setWindowTitle("Generador de Facturas Abstract List Model")
 
         listaTareas = [
             ('Producto 1', '3,2', '5', '16,00'),
@@ -126,7 +126,7 @@ class MainWindow(QMainWindow):
             numeroFactura = self.txtnumfactura.text()
 
             # Crear el archivo PDF
-            c = canvas.Canvas("facturaAbstractList.pdf", pagesize=A4)
+            c = canvas.Canvas("PDFfacturaList.pdf", pagesize=A4)
             c.setFont("Helvetica", 20)
             c.drawString(340, 750, "FACTURA SIMPLIFICADA")
 

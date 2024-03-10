@@ -8,12 +8,9 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
-from conexionBD import ConexionBD
 
 
-
-class ModeloTaboa(QAbstractTableModel):  # Define una clase llamada ModeloTaboa que hereda de QAbstractTableModel.
-
+class ModeloTaboa(QAbstractTableModel):
     def __init__(self, datos):
         super().__init__()  # Llama al inicializador de la clase base (QAbstractTableModel).
         self.datos = datos  # Inicializa el atributo 'datos' con los datos proporcionados.
@@ -22,43 +19,40 @@ class ModeloTaboa(QAbstractTableModel):  # Define una clase llamada ModeloTaboa 
         return len(self.datos)  # Devuelve el número de filas en los datos.
 
     def columnCount(self, index):
-        if self.datos:
-            # Devuelve el número de columnas basado en la longitud de la primera fila de datos.
-            return len(self.datos[0])
-        return 0
+        return len(self.datos[0])  # Devuelve el número de columnas en los datos (se asume que todas las filas tienen la misma cantidad de columnas).
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if index.isValid():  # Verifica si el índice es válido.
-            if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
-                # Obtiene el valor de los datos en la posición del índice y lo devuelve como una cadena.
-                value = self.datos[index.row()][index.column()]
-                return str(value)
+            if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para mostrar o editar datos.
+                value = self.datos[index.row()][index.column()]  # Obtiene el valor en la posición del índice.
+                return str(value)  # Devuelve el valor convertido a cadena.
 
     def setData(self, index, value, role):
         if role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para editar datos.
-            # Actualiza el valor de los datos en la posición del índice con el nuevo valor proporcionado.
-            self.datos[index.row()][index.column()] = value
+            self.datos[index.row()][index.column()] = value  # Actualiza el valor en la posición del índice con el nuevo valor.
             return True  # Devuelve True para indicar que la operación fue exitosa.
         return False  # Devuelve False si el rol no es para editar datos.
 
-    def flags(self, index):
-        # Devuelve las banderas que especifican cómo se comportan los elementos en la vista, como si son editables, seleccionables, etc.
+    def flags(self, index):# Para que puedan ser editables, seleccionables, etc
         return Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Generador de Facturas Abstract SQL")
+        self.setWindowTitle("Generador de Facturas")
 
         cajav = QVBoxLayout()
 
-        # BASE DE DATOS
-        ruta_bd = "modelosClasicos.dat"
-        self.conexion_bd = ConexionBD(ruta_bd)
-        self.conexion_bd.conectaBD()
-        self.conexion_bd.creaCursor()
-
-        self.tabla_data = []  # Creo lista vacía
+        # LISTA CON CONTENIDO DE TABLA
+        self.tabla_data = [
+            ['Producto 1', '3,2', '5', '16,00'],
+            ['Producto 2', '2,1', '3', '6,30'],
+            ['Producto 3', '2,9', '76', '220,40'],
+            ['Producto 4', '5', '23', '115,00'],
+            ['Producto 5', '4,95', '3', '14,85'],
+            ['Producto 6', '6', '2', '12,00']
+        ]
 
         # BOTONES Y TXT
         direccion = QLabel("Direccion")
@@ -92,20 +86,23 @@ class MainWindow(QMainWindow):
 
 
         # TABLA
-        self.tabla = QTableView()
-        cajav.addWidget(self.tabla)
-        self.modelo = ModeloTaboa(self.tabla_data)
-        self.tabla.setModel(self.modelo)
+        self.table_view = QTableView()
+        self.table_view.setModel(ModeloTaboa(self.tabla_data))
+        self.table_view.setSelectionMode(QTableView.SelectionMode.SingleSelection)
+        self.table_view.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
+        self.table_view.setEditTriggers(QTableView.EditTrigger.AllEditTriggers)
+        cajav.addWidget(self.table_view)
 
-        # TRIGGERS
-        self.tabla.setSelectionMode(QTableView.SelectionMode.SingleSelection)
-        self.tabla.setSelectionBehavior(QTableView.SelectionBehavior.SelectRows)
-        self.tabla.setEditTriggers(QTableView.EditTrigger.AllEditTriggers)
+
+        # BOTÓN AGREGAR PRODUCTO
+        self.botonAnhadir = QPushButton("Agregar Producto")
+        self.botonAnhadir.clicked.connect(self.on_botonAnhadir_clicked)
+        cajav.addWidget(self.botonAnhadir)
 
         # BOTÓN GENERAR FACTURA
-        self.botonCargarDatos = QPushButton("Generar Factura")
-        self.botonCargarDatos.clicked.connect(self.on_botonGenerarFactura_clicked)
-        cajav.addWidget(self.botonCargarDatos)
+        self.botonGenerarFactura = QPushButton("Generar Factura")
+        self.botonGenerarFactura.clicked.connect(self.on_botonGenerarFactura_clicked)
+        cajav.addWidget(self.botonGenerarFactura)
 
         container = QWidget()
         container.setLayout(cajav)  # Añadir layout principal
@@ -113,19 +110,20 @@ class MainWindow(QMainWindow):
         self.setFixedSize(500,700)
         self.show()
 
-        self.on_cargarTabla()
+    def on_botonAnhadir_clicked(self):
+        # Método para agregar un nuevo producto a la tabla
+        nombreProducto, ok_name = QInputDialog.getText(self, "Agregar Producto", "Nombre del Producto:")
+        precioProducto, ok_price = QInputDialog.getDouble(self, "Agregar Producto", "Precio del Producto:")
+        cantidadProducto, ok_quantity = QInputDialog.getInt(self, "Agregar Producto", "Cantidad del Producto:")
+        total, ok_total = QInputDialog.getDouble(self, "Total Producto", "Total del producto:")
 
-    def on_cargarTabla(self):
-        # Consulta SQL para obtener los datos de ventas
-        consulta_sql = "SELECT * FROM ventas"
+        # Agregar los datos a la lista de datos
+        nuevaFila = [nombreProducto, precioProducto, cantidadProducto, total]
+        self.tabla_data.append(nuevaFila)
 
-        # Guardar en variables los datos de la consulta
-        datosBD = self.conexion_bd.consultaSenParametros(consulta_sql)
+        # Actualizar la vista de la tabla
+        self.table_view.model().layoutChanged.emit()
 
-        self.tabla_data = datosBD
-        self.modelo = ModeloTaboa(self.tabla_data)
-        self.tabla.setModel(self.modelo)
-        self.tabla.show()
 
     def on_botonGenerarFactura_clicked(self):
         try:
@@ -140,7 +138,7 @@ class MainWindow(QMainWindow):
             numeroFactura = self.txtnumfactura.text()
 
             # Crear el archivo PDF
-            c = canvas.Canvas("facturaAbstractSql.pdf", pagesize=A4)
+            c = canvas.Canvas("PDFfacturaTable.pdf", pagesize=A4)
             c.setFont("Helvetica", 20)
             c.drawString(340, 750, "FACTURA SIMPLIFICADA")
 
@@ -192,7 +190,7 @@ class MainWindow(QMainWindow):
             c.drawText(numeroFactura_texto)
 
             # Crear datos para la tabla
-            encabezadoTabla = ['ID', 'Fecha1', 'Fecha2', 'Numero']
+            encabezadoTabla = ['Descripción', 'Importe', 'Cantidad', 'Total']
             infoTabla = self.tabla_data
 
             # Configurar el estilo de la tabla
@@ -213,17 +211,17 @@ class MainWindow(QMainWindow):
             ])
 
             # TAMAÑO TABLA
-            tabla = Table(data=[encabezadoTabla] + infoTabla, colWidths=[200, 100, 100, 100])
+            tabla = Table(data=[encabezadoTabla] + infoTabla, colWidths=[200, 70, 70, 70])
             tabla.setStyle(estilo)
 
             # POSICION TABLA EN LIENZO
             tabla.wrapOn(c, 0, 0)
-            tabla.drawOn(c, 80, 400)  # Ajusta las coordenadas
+            tabla.drawOn(c, 100, 300)  # Ajusta las coordenadas
 
-            c.line(100, 250, 575, 250)
+            c.line(100, 200, 575, 200)
 
             c.setFont("Helvetica-Bold", 16)
-            c.drawRightString(450, 200, "GRACIAS POR SU CONFIANZA")
+            c.drawRightString(450, 150, "GRACIAS POR SU CONFIANZA")
 
             # TABLA 2
             tabla_data2 = [['']]

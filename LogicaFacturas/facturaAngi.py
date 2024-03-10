@@ -111,7 +111,7 @@ class MainWindow(QMainWindow):
             numeroFactura = self.text_fields[6].text()
 
             # Crear el archivo PDF
-            c = canvas.Canvas("facturaExamenQt6Angi.pdf", pagesize=A4)
+            c = canvas.Canvas("PDFfacturaAngi.pdf", pagesize=A4)
             c.setFont("Helvetica", 20)
             c.drawString(340, 750, "FACTURA SIMPLIFICADA")
 
