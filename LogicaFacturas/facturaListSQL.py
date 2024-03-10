@@ -134,6 +134,9 @@ class MainWindow(QMainWindow):
         consulta = "SELECT * FROM ventas"
         datos_bd = self.conexion_bd.consultaSenParametros(consulta)
 
+        # Obtener los datos de las dos primeras columnas
+        self.datos_grafica = [(fila[0], fila[1]) for fila in datos_bd]
+
         self.lista_data = datos_bd
         self.modelo = TareasModelo(self.lista_data)
         self.lstTareas.setModel(self.modelo)
@@ -142,8 +145,10 @@ class MainWindow(QMainWindow):
     def on_botonGenerarFactura_clicked(self):
         try:
 
+            '''
             hojaEstilo = getSampleStyleSheet()  # Creo una hoja de estilo
             elementosDoc = []  # Creo una lista de elementos vacía
+            '''
 
             # TABLA
             temperaturas = [
@@ -152,6 +157,20 @@ class MainWindow(QMainWindow):
                 [15, 16, 20, 28, 30, 32, 35, 36, 34, 30, 20, 18],
                 [-3, -4, -1, 18, 20, 22, 25, 26, 24, 20, 2, -2]
             ]
+
+            '''
+            # GRAFICA HORIZONTAL
+            dibujoGrafica = Drawing(300,150)# Anchura y altura del lienzo en blanco
+            graficaLineas = HorizontalLineChart()
+            graficaLineas.data =[self.datos_grafica]
+            graficaLineas.x = 50
+            graficaLineas.y = 50
+            graficaLineas.height = 300# Anchura de la grafica
+            graficaLineas.width = 150# Altura de la grafica
+            dibujoGrafica.add(graficaLineas)
+            elementosDoc.append(dibujoGrafica)
+            '''
+
             # GRÁFICA DE BARRAS
             dibujo = Drawing(150, 300)  # Crear un objeto de tipo Drawing
             graficaBarras = VerticalBarChart()  # Crear un objeto de tipo VerticalBarChart
@@ -160,8 +179,7 @@ class MainWindow(QMainWindow):
             graficaBarras.y = 50  # Posición en y de la gráfica
             graficaBarras.height = 150  # Altura de la gráfica
             graficaBarras.width = 300  # Ancho de la gráfica
-            graficaBarras.data = temperaturas[
-                                 1:]  # Datos de la gráfica donde 1: es para omitir la primera fila de la tabla
+            graficaBarras.data = temperaturas[1:]  # Datos de la gráfica donde 1: es para omitir la primera fila de la tabla
             graficaBarras.strokeColor = colors.black  # Color del borde de la gráfica
             graficaBarras.valueAxis.valueMin = -5  # Valor mínimo del eje vertical de la gráfica
             graficaBarras.valueAxis.valueMax = 40  # Valor máximo del eje vertical de la gráfica
@@ -170,14 +188,14 @@ class MainWindow(QMainWindow):
             graficaBarras.categoryAxis.labels.dx = 8  # Distancia en x de las etiquetas del eje horizontal de la gráfica
             graficaBarras.categoryAxis.labels.dy = -10  # Distancia en y de las etiquetas del eje horizontal de la gráfica
             graficaBarras.categoryAxis.labels.angle = 30  # Ángulo de las etiquetas del eje horizontal de la gráfica
-            graficaBarras.categoryAxis.categoryNames = temperaturas[
-                0]  # Nombres de las categorías del eje horizontal de la gráfica
+            graficaBarras.categoryAxis.categoryNames = temperaturas[0]  # Nombres de las categorías del eje horizontal de la gráfica
             graficaBarras.groupSpacing = 10  # Espacio entre grupos de barras de la gráfica
             graficaBarras.barSpacing = 5  # Espacio entre barras de la gráfica
 
             dibujo.add(graficaBarras)  # Agregar la gráfica al dibujo
+            '''
             elementosDoc.append(dibujo)  # Agregar el dibujo a la lista de elementos
-
+            '''
 
             print("Generando factura...")
             # Recoger los datos de los campos de texto
@@ -263,8 +281,13 @@ class MainWindow(QMainWindow):
 
             ])
 
-            # Añado gráfica
-            dibujo.drawOn(c, 100, 300)  # Ajusta la posición de acuerdo a tus necesidades
+            # Añado gráfica Barras
+            dibujo.drawOn(c, 0, 300)  # Ajusta la posición de acuerdo a tus necesidades
+
+            '''
+            # Añado grafica Lineas
+            dibujoGrafica.drawOn(c, 200, 300)
+            '''
 
             # Crear y dibujar la tabla en el lienzo
             tabla = Table(data=datos_factura, colWidths=[100, 100, 100, 100])

@@ -49,12 +49,12 @@ elementosDoc.append(Spacer(1, 100)) # Agregar un espacio  1 pulgada de ancho y 1
 # GRÁFICA DE LÍNEAS
 dibujo = Drawing(400, 200) # Crear un objeto de tipo Drawing
 graficaLineas = HorizontalLineChart() # Crear un objeto de tipo HorizontalLineChart
-graficaLineas.x = 30
-graficaLineas.y =50
-graficaLineas.height = 125
-graficaLineas.width = 350
+graficaLineas.x = 30# Posicion en x de la grafica(horizontal)
+graficaLineas.y =50# Posicion en y de la grafica(vertical)
+graficaLineas.height = 125# Altura de la gráfica
+graficaLineas.width = 350# Ancho de la gráfica
 # graficaLineas.data = [temperaturas[1]]# Así solo sale una linea. Si quiero que refleje las dos series debo colocar: graficaLineas.data = temperaturas[1:]. SIn los dos corchetes da error¿ probar
-graficaLineas.data = temperaturas[1:]
+graficaLineas.data = temperaturas[1:]# Muestrame toddo a partir de la primera fila de la lista. Excluyo la primera fila (nombres meses)
 graficaLineas.categoryAxis.categoryNames = temperaturas[0]# Nombres de las categorías del eje horizontal de la gráfica. Quiero que las etiquetas sean la primera fila de la lista temperaturas que son los meses.
 graficaLineas.categoryAxis.labels.angle = 20 # Ángulo de las etiquetas del eje horizontal de la gráfica
 graficaLineas.categoryAxis.labels.dx = 10# Distancia en x de las etiquetas del eje horizontal de la gráfica
@@ -91,11 +91,11 @@ tarta.y = 15# Posición en y de la gráfica
 tarta.data = [10,5,20,25,40]# Datos de la gráfica
 tarta.labels = ['Edge', 'Brave', 'Firefox', 'Safari', 'Chrome']# Etiquetas de la gráfica
 tarta.slices.strokeWidth=0.5# Grosor del borde de las porciones de la gráfica
-tarta.slices[3].popout = 10# Esto es para que se separe la porción de la gráfica de la tarta en 10 puntos
-tarta.slices[3].strokeWidth = 2# Grosor del borde de la porción de la gráfica
-tarta.slices[3].strokeDashArray = [2,2]# Tipo de línea del borde de la porción de la gráfica. Es en forma de guión.
-tarta.slices[3].labelRadius = 2# Radio de la etiqueta de la porción de la gráfica. ESto es para que se ponga la etiqueta fuera de la porción de la gráfica.
-tarta.slices[3].fontColor = colors.red# Color de la fuente de la etiqueta de la porción de la gráfica
+tarta.slices[3].popout = 10# Esto es para que se separe la porción Safari de la gráfica de la tarta en 10 puntos
+tarta.slices[3].strokeWidth = 2# Grosor del borde de la porción Safari de la gráfica
+tarta.slices[3].strokeDashArray = [2,2]# Tipo de línea del borde de la porción Safari de la gráfica. Es en forma de guión.
+tarta.slices[3].labelRadius = 2# Radio de la etiqueta de la porción Safari de la gráfica. ESto es para que se ponga la etiqueta fuera de la porción de la gráfica.
+tarta.slices[3].fontColor = colors.red# Color de la fuente de la etiqueta de la porción Safari de la gráfica
 # tarta.slices[3].fillColor = colors.pink# Color de relleno de la porción de la gráfica
 tarta.sideLabels = 1# Esto es para que se pongan las etiquetas fuera de la gráfica
 dibujo.add(tarta)# Agregar la gráfica al dibujo
