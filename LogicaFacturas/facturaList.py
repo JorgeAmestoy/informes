@@ -30,6 +30,16 @@ class TareasModelo(QAbstractListModel):  # Define una clase llamada TareasModelo
         self.tareas = tareas or []  # Inicializa el atributo 'tareas' con el valor del argumento tareas, si se proporciona. Si no se proporciona ningún valor para tareas, se asigna una lista vacía [].
 
     def data(self, indice, rol):
+        """
+        Devuelve los datos de la tarea en el índice dado y para el rol especificado.
+
+        :param indice: El índice de la tarea en la lista de tareas.
+        :type indice: QModelIndex
+        :param rol: El rol del dato que se solicita.
+        :type rol: Qt.ItemDataRole
+        :return: El dato de la tarea si el rol es DisplayRole, None si el rol es DecorationRole.
+        :rtype: str or None
+        """
         if rol == Qt.ItemDataRole.DisplayRole:  # Verifica si el rol es para mostrar datos.
             tarea = self.tareas[indice.row()]  # Obtiene la tarea en el índice dado.
             return ", ".join(map(str, tarea))  # Concatena todos los elementos de la tupla en una cadena separada por comas y la devuelve como representación de la tarea.
@@ -38,6 +48,18 @@ class TareasModelo(QAbstractListModel):  # Define una clase llamada TareasModelo
             return None  # Devuelve None para indicar que no hay decoración asociada.
 
     def setData(self, indice, valor, rol=Qt.ItemDataRole.EditRole):
+        """
+                Establece los datos de la tarea en el índice dado con el valor especificado.
+
+                :param indice: El índice de la tarea en la lista de tareas.
+                :type indice: QModelIndex
+                :param valor: El nuevo valor de la tarea.
+                :type valor: str
+                :param rol: El rol del dato que se va a editar.
+                :type rol: Qt.ItemDataRole
+                :return: True si la operación de edición fue exitosa, False en caso contrario.
+                :rtype: bool
+                """
         if rol == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para editar datos.
             # Actualiza la tupla de la tarea en el índice dado dividiendo el valor en una lista y convirtiéndola en una tupla.
             self.tareas[indice.row()] = tuple(valor.split(", "))
@@ -49,12 +71,20 @@ class TareasModelo(QAbstractListModel):  # Define una clase llamada TareasModelo
         return False  # Devuelve False si el rol no es para editar datos.
 
     def rowCount(self, indice):
+        """
+               Devuelve el número de tareas en la lista.
+
+               :param indice: No utilizado en este método.
+               :type indice: QModelIndex
+               :return: El número de tareas en la lista.
+               :rtype: int
+               """
         return len(self.tareas)  # Devuelve el número de tareas en la lista.
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Generador de Facturas Abstract List Model")
+        self.setWindowTitle("Generador de Facturas List Model")
 
         listaTareas = [
             ('Producto 1', '3,2', '5', '16,00'),
@@ -68,7 +98,7 @@ class MainWindow(QMainWindow):
         self.modelo = TareasModelo(listaTareas)  # Creación del modelo de datos personalizado para las tareas
         cajav = QVBoxLayout()  # Creación de un layout vertical para organizar los widgets verticalmente
         self.lstTareas = QListView()  # Creación de un QListView para mostrar la lista de tareas
-        self.lstTareas.setModel(self.modelo)  # Establecimiento del modelo de datos para el QListView
+        self.lstTareas.setModel(self.modelo)  # Al objeto QListView() le añado el modelo con la lista de productos "listaTareas"
         self.lstTareas.setSelectionMode(QListView.SelectionMode.MultiSelection)  # Configuración del QListView para permitir la selección múltiple de tareas
         cajav.addWidget(self.lstTareas)  # Agregado del QListView al layout vertical
 
@@ -114,6 +144,15 @@ class MainWindow(QMainWindow):
         self.show()
 
     def on_botonGenerarFactura_clicked(self):
+        """
+            Maneja el evento de hacer clic en el botón 'Generar Factura'.
+
+            Este método recoge los datos de los campos de texto del formulario,
+            crea un archivo PDF con la factura simplificada y guarda el archivo.
+            En caso de error, imprime un mensaje de error.
+
+            :return: None
+            """
         try:
             print("Generando factura...")
             # Recoger los datos de los campos de texto
@@ -178,7 +217,7 @@ class MainWindow(QMainWindow):
             c.drawText(numeroFactura_texto)
 
             # Crear la lista de datos de la factura
-            datos_factura = []# inicializa una lista vacía llamada datos_factura. Se utilizará para almacenar los datos de la factura en un formato que sea fácil de usar al generar el PDF.
+            datos_factura = []# inicializa una lista vacía llamada datos_factura.
             for tarea in self.modelo.tareas:#  Esto comienza un bucle for que recorre cada tarea en la lista de tareas del modelo. Con la variable modelo, que contiene el QAbstractListModel, accedo a dicha clase y cojo "tareas". En la variable modelo está también la lista/tupla con los datos de la lista.
                 descripcion, importe, cantidad, total = tarea# Aquí, descripcion, importe, cantidad y total son variables que se desempaquetan de cada tupla tarea en la lista de tareas. Por ejemplo, para la primera tarea ('Producto 1', '3,2', '5', '16,00'), descripcion sería 'Producto 1', importe sería '3,2', cantidad sería '5' y total sería '16,00'.
                 datos_factura.append([descripcion, importe, cantidad, total])#  Luego, se agrega una lista que contiene estos datos (descripcion, importe, cantidad y total) a la lista datos_factura.
@@ -191,7 +230,7 @@ class MainWindow(QMainWindow):
                 ('BOTTOMPADDING', (0, 0), (-1, 0), 7),  # Añade un espacio inferior a la primera fila
                 ('BACKGROUND', (0, 1), (-1, -1), colors.lightgreen), # Establece el color de fondo claro para todas las filas excepto la primera
                 ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),  # Establece la fuente en negrita para la última fila
-                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),  # Centra todo el texto dentro de la tabla
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),  # Centra toddo el texto dentro de la tabla
                 ('FONTSIZE', (0, 0), (-1, -1), 15),  # Establece el tamaño de fuente en 15 para toda la tabla
                 ('LEADING', (0, 0), (-1, -1), 20),  # Establece el interlineado en 20 para toda la tabla
                 ('GRID', (0, 0), (-1, -1), 1, colors.white)  # Añade una cuadrícula blanca a la tabla

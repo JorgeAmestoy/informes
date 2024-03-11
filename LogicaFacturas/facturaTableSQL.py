@@ -12,38 +12,88 @@ from conexionBD import ConexionBD
 
 
 
-class ModeloTaboa(QAbstractTableModel):  # Define una clase llamada ModeloTaboa que hereda de QAbstractTableModel.
+class ModeloTaboa(QAbstractTableModel):
+    """
+    Define una clase llamada ModeloTaboa que hereda de QAbstractTableModel.
+
+    """
 
     def __init__(self, datos):
-        super().__init__()  # Llama al inicializador de la clase base (QAbstractTableModel).
-        self.datos = datos  # Inicializa el atributo 'datos' con los datos proporcionados.
+        """
+        Inicializa una nueva instancia de ModeloTaboa.
+
+        :param datos: Los datos que se utilizarán para la tabla.
+        :type datos: list
+        """
+        super().__init__()
+        # Llama al inicializador de la clase base (QAbstractTableModel).
+        self.datos = datos
 
     def rowCount(self, index):
-        return len(self.datos)  # Devuelve el número de filas en los datos.
+        """
+        Devuelve el número de filas en los datos.
+
+        :param index: No utilizado en este método.
+        :type index: QModelIndex
+        :return: El número de filas en los datos.
+        :rtype: int
+        """
+        return len(self.datos)
 
     def columnCount(self, index):
+        """
+        Devuelve el número de columnas en los datos.
+
+        :param index: No utilizado en este método.
+        :type index: QModelIndex
+        :return: El número de columnas en los datos.
+        :rtype: int
+        """
         if self.datos:
             # Devuelve el número de columnas basado en la longitud de la primera fila de datos.
             return len(self.datos[0])
         return 0
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
-        if index.isValid():  # Verifica si el índice es válido.
+        """
+        Devuelve los datos para el índice y el rol especificados.
+
+        :param index: El índice para el que se requieren los datos.
+        :type index: QModelIndex
+        :param role: El rol para el que se solicitan los datos.
+        :type role: Qt.ItemDataRole
+        :return: Los datos en el índice y el rol especificados.
+        :rtype: str
+        """
+        if index.isValid():
+            # Verifica si el índice es válido.
             if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
                 # Obtiene el valor de los datos en la posición del índice y lo devuelve como una cadena.
                 value = self.datos[index.row()][index.column()]
                 return str(value)
 
     def setData(self, index, value, role):
-        if role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para editar datos.
+        """
+        Establece los datos en el índice especificado.
+
+        :param index: El índice para el que se establecerán los datos.
+        :type index: QModelIndex
+        :param value: El nuevo valor de los datos.
+        :type value: str
+        :param role: El rol para el que se establecerán los datos.
+        :type role: Qt.ItemDataRole
+        :return: True si la operación fue exitosa, False si no lo fue.
+        :rtype: bool
+        """
+        if role == Qt.ItemDataRole.EditRole:
+            # Verifica si el rol es para editar datos.
             # Actualiza el valor de los datos en la posición del índice con el nuevo valor proporcionado.
             self.datos[index.row()][index.column()] = value
-            return True  # Devuelve True para indicar que la operación fue exitosa.
-        return False  # Devuelve False si el rol no es para editar datos.
+            return True
+            # Devuelve True para indicar que la operación fue exitosa.
+        return False
+        # Devuelve False si el rol no es para editar datos.
 
-    def flags(self, index):
-        # Devuelve las banderas que especifican cómo se comportan los elementos en la vista, como si son editables, seleccionables, etc.
-        return Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -116,6 +166,11 @@ class MainWindow(QMainWindow):
         self.on_cargarTabla()
 
     def on_cargarTabla(self):
+        """
+                Ejecuta una consulta SQL para obtener los datos de ventas.
+
+                :return: None
+                """
         # Consulta SQL para obtener los datos de ventas
         consulta_sql = "SELECT * FROM ventas"
 
@@ -224,6 +279,7 @@ class MainWindow(QMainWindow):
 
             c.setFont("Helvetica-Bold", 16)
             c.drawRightString(450, 200, "GRACIAS POR SU CONFIANZA")
+
 
             # TABLA 2
             tabla_data2 = [['']]

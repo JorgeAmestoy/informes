@@ -2,10 +2,10 @@
 
 ### PREGUNTAS EXAMEN
 
-1. **¿Qué se entiende por término prueba?**
+1. **¿Qué se entiende por término prueba?**<br>
 El término "prueba" se refiere a procesos sistemáticos para evaluar un sistema o componente con el objetivo de detectar errores y verificar su funcionamiento correcto.
 Las pruebas de software son invetsigaciones cuyo objetivo es proporcionar información objetiva e independeiente
-sobre la calidad del producto.
+sobre la calidad del producto.<br>
 2. **¿Qué son validación y verificación?**
 
 **VERIFCACIÓN:**

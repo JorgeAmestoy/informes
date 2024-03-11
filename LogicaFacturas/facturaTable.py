@@ -12,29 +12,86 @@ from reportlab.lib import colors
 
 class ModeloTaboa(QAbstractTableModel):
     def __init__(self, datos):
+        """
+        Inicializa el modelo con los datos proporcionados.
+
+        :param datos: Los datos para inicializar el modelo.
+        :type datos: list
+        """
         super().__init__()  # Llama al inicializador de la clase base (QAbstractTableModel).
         self.datos = datos  # Inicializa el atributo 'datos' con los datos proporcionados.
 
     def rowCount(self, index):
-        return len(self.datos)  # Devuelve el número de filas en los datos.
+        """
+        Devuelve el número de filas en los datos.
+
+        :param index: El índice.
+        :type index: QModelIndex
+        :return: El número de filas en los datos.
+        :rtype: int
+        """
+        return len(self.datos)
 
     def columnCount(self, index):
-        return len(self.datos[0])  # Devuelve el número de columnas en los datos (se asume que todas las filas tienen la misma cantidad de columnas).
+        """
+        Devuelve el número de columnas en los datos.
+
+        Se asume que todas las filas tienen la misma cantidad de columnas.
+
+        :param index: El índice.
+        :type index: QModelIndex
+        :return: El número de columnas en los datos.
+        :rtype: int
+        """
+        return len(self.datos[0])
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
+        """
+        Devuelve los datos en el índice dado con el rol especificado.
+
+        :param index: El índice.
+        :type index: QModelIndex
+        :param role: El rol de los datos.
+        :type role: Qt.ItemDataRole
+        :return: Los datos en el índice dado.
+        :rtype: str
+        """
         if index.isValid():  # Verifica si el índice es válido.
             if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para mostrar o editar datos.
                 value = self.datos[index.row()][index.column()]  # Obtiene el valor en la posición del índice.
                 return str(value)  # Devuelve el valor convertido a cadena.
 
     def setData(self, index, value, role):
+        """
+        Establece los datos en el índice dado con el valor especificado.
+
+        :param index: El índice.
+        :type index: QModelIndex
+        :param value: El valor a establecer.
+        :type value: str
+        :param role: El rol de los datos.
+        :type role: Qt.ItemDataRole
+        :return: True si la operación fue exitosa, False de lo contrario.
+        :rtype: bool
+        """
         if role == Qt.ItemDataRole.EditRole:  # Verifica si el rol es para editar datos.
             self.datos[index.row()][index.column()] = value  # Actualiza el valor en la posición del índice con el nuevo valor.
             return True  # Devuelve True para indicar que la operación fue exitosa.
         return False  # Devuelve False si el rol no es para editar datos.
 
-    def flags(self, index):# Para que puedan ser editables, seleccionables, etc
+    def flags(self, index):
+        """
+        Devuelve las banderas para el índice dado.
+
+        Esto permite que los datos sean editables, seleccionables y habilitados.
+
+        :param index: El índice.
+        :type index: QModelIndex
+        :return: Las banderas para el índice dado.
+        :rtype: Qt.ItemFlag
+        """
         return Qt.ItemFlag.ItemIsEditable | Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled
+
 
 
 class MainWindow(QMainWindow):

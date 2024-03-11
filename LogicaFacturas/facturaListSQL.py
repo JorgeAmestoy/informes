@@ -82,8 +82,7 @@ class MainWindow(QMainWindow):
         cajav = QVBoxLayout()  # Creación de un layout vertical para organizar los widgets verticalmente
         self.lstTareas = QListView()  # Creación de un QListView para mostrar la lista de tareas
         self.lstTareas.setModel(self.modelo)  # Establecimiento del modelo de datos para el QListView
-        self.lstTareas.setSelectionMode(
-            QListView.SelectionMode.MultiSelection)  # Configuración del QListView para permitir la selección múltiple de tareas
+        self.lstTareas.setSelectionMode(QListView.SelectionMode.MultiSelection)  # Configuración del QListView para permitir la selección múltiple de tareas
         cajav.addWidget(self.lstTareas)  # Agregado del QListView al layout vertical
 
         # BOTONES Y TXT
@@ -130,6 +129,13 @@ class MainWindow(QMainWindow):
         self.on_cargarDatos()
 
     def on_cargarDatos(self):
+        """
+        Ejecuta una consulta SQL para obtener los datos de la base de datos.
+
+        Luego, inicializa el atributo 'datos_grafica' con los datos de las dos primeras columnas obtenidos de la base de datos.
+
+        Finalmente, crea un modelo de datos 'TareasModelo' con los datos de la base de datos, lo establece en la lista 'lstTareas' y la muestra.
+        """
         # Ejecuta una consulta SQL para obtener los datos de la base de datos
         consulta = "SELECT * FROM ventas"
         datos_bd = self.conexion_bd.consultaSenParametros(consulta)
