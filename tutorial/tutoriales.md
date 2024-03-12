@@ -156,5 +156,55 @@ La línea `total_row = ['', '', 'TOTAL', f'{total:.2f} €']` crea una nueva fil
 - `f'{total:.2f} €'`: Utiliza una cadena formateada (f-string) para convertir el valor de `total` en una cadena con dos decimales (`:.2f`) seguidos del símbolo del euro (`€`). Esto muestra el total con dos decimales y el símbolo del euro al final.
 
 
+------------------------------------------
 
+Nombre del caso de prueba: Inserción de un nuevo registro en la base de datos.
 
+Descripción: Este caso de prueba verifica si la inserción de un nuevo registro en la base de datos se realiza correctamente utilizando el método engadeRexistro.
+
+Pasos:
+
+    Iniciar la aplicación.
+    Ejecutar el método engadeRexistro con los datos del nuevo registro.
+    Verificar si el registro se ha insertado correctamente en la base de datos.
+
+Condiciones de ejecución:
+
+    La aplicación debe tener acceso a la base de datos.
+    Se debe proporcionar una consulta SQL válida para insertar un nuevo registro.
+    Los parámetros necesarios para la inserción deben estar correctamente formateados y proporcionados.
+
+Resultado esperado: Se espera que el nuevo registro se inserte correctamente en la base de datos sin errores.
+
+Este caso de prueba puede ser automatizado mediante el uso de frameworks de pruebas como pytest o unittest. Se puede crear una prueba específica que invoque el método engadeRexistro con datos de prueba y luego verifique si el registro se ha insertado correctamente consultando la base de datos para verificar la presencia del nuevo registro.
+User
+tambien con resulñtado esperado, estado de proba resultado obtenido errores asociados
+ChatGPT
+
+Aquí tienes una versión actualizada del caso de prueba, incluyendo el resultado esperado, el estado de la prueba, el resultado obtenido y los errores asociados:
+
+Nombre del caso de prueba: Inserción de un nuevo registro en la base de datos.
+
+Descripción: Este caso de prueba verifica si la inserción de un nuevo registro en la base de datos se realiza correctamente utilizando el método engadeRexistro.
+
+Pasos:
+
+    Iniciar la aplicación.
+    Ejecutar el método engadeRexistro con los datos del nuevo registro.
+    Verificar si el registro se ha insertado correctamente en la base de datos.
+
+Condiciones de ejecución:
+
+    La aplicación debe tener acceso a la base de datos.
+    Se debe proporcionar una consulta SQL válida para insertar un nuevo registro.
+    Los parámetros necesarios para la inserción deben estar correctamente formateados y proporcionados.
+
+Resultado esperado: Se espera que el nuevo registro se inserte correctamente en la base de datos sin errores.
+
+Estado de prueba: Pendiente.
+
+Resultado obtenido: N/A (No se ha ejecutado la prueba aún).
+
+Errores asociados: N/A.
+
+Una vez que se ejecute la prueba, se actualizará el estado de la prueba y se proporcionará el resultado obtenido junto con cualquier error asociado que pueda surgir durante la ejecución.
